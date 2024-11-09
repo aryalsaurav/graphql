@@ -30,17 +30,15 @@ from products import schema as product_schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
+    path('api/v1/user/',include('accounts.api.v1.urls',namespace='accounts_v1')),
     path('account/graphql',csrf_exempt(GraphQLView.as_view(graphiql=True,schema=account_schema.schema))),
-    path('product/graphql',csrf_exempt(GraphQLView.as_view(graphiql=True,schema=product_schema.schema)))
+    path('product/graphql',csrf_exempt(GraphQLView.as_view(graphiql=True,schema=product_schema.schema))),
 ]
 
-urlpatterns += [
-    # YOUR PATTERNS
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    # Optional UI:
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
