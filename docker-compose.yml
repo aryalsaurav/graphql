@@ -15,7 +15,7 @@ services:
       - redis
       - celery
     networks:
-      - django_network
+      - graphql_network
 
   db:
     image: postgres:15
@@ -24,12 +24,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - django_network
+      - graphql_network
 
   redis:
     image: redis:7
     networks:
-      - django_network
+      - graphql_network
 
   celery:
     build: .
@@ -40,7 +40,7 @@ services:
       - redis
       - db
     networks:
-      - django_network
+      - graphql_network
 
   celery-beat:
     build: .
@@ -52,10 +52,10 @@ services:
       - redis
       - db
     networks:
-      - django_network
+      - graphql_network
 
 networks:
-  django_network:
+  graphql_network:
 
 volumes:
   postgres_data:
