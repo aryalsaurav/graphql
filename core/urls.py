@@ -25,8 +25,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from graphene_django.views import GraphQLView
 
-from accounts import schema as account_schema
-from products import schema as product_schema
+from core import schema
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,8 +33,7 @@ urlpatterns = [
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('api/v1/user/',include('accounts.api.v1.urls',namespace='accounts_v1')),
-    path('account/graphql',csrf_exempt(GraphQLView.as_view(graphiql=True,schema=account_schema.schema))),
-    path('product/graphql',csrf_exempt(GraphQLView.as_view(graphiql=True,schema=product_schema.schema))),
+    path('graphql',csrf_exempt(GraphQLView.as_view(graphiql=True,schema=schema.schema))),
 ]
 
 
