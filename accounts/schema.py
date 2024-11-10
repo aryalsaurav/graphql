@@ -1,9 +1,9 @@
 import graphene
 
 
+from .types import UserQuery
 
-
-query_list = []
+query_list = [UserQuery]
 
 class Query(*query_list,graphene.ObjectType):
     pass
