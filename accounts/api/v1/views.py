@@ -2,12 +2,42 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 
 from accounts.models import User
 
-from .serializers import UserCreateSerializer
+from .serializers import UserCreateSerializer,LoginSerializer
+
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    
+    @extend_schema(
+        request = LoginSerializer,
+        responses = {200: {
+            'access': 'str',
+            'refresh': 'str',
+        }
+        }
+    )
+    def post(self,request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data.get('user')
+            refresh = RefreshToken.for_user(user)
+            context = {
+                'status':200,
+                'message':"Logged in successfully !!!",
+                'data': {
+                    'access':str(refresh.access_token),
+                    'refresh':str(refresh)
+                }
+            }
+            return Response(context,status=200)
 
 
 
@@ -23,7 +53,8 @@ class UserCreateView(APIView):
     
     @extend_schema(
         request = UserCreateSerializer,
-        responses = {201:UserCreateSerializer}
+        responses = {201:UserCreateSerializer},
+        methods=["POST"]
     )
     def post(self,request):
         serializer = self.serializer_class(data=request.data)

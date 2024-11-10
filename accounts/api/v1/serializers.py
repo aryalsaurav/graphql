@@ -1,5 +1,9 @@
 from rest_framework import serializers
 
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from django.contrib.auth import authenticate
+
 from accounts.models import User
 
 
@@ -26,3 +30,23 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','email','username','first_name','last_name','gender','phone_no']
+
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    password = serializers.CharField()
+    
+    
+    def validate(self,validated_data):
+        email = validated_data.pop('email')
+        password = validated_data.pop('password')
+        
+        user = authenticate(email=email,password=password)
+        
+        if not user:
+            raise ValueError("Incorrect email or password")
+        validated_data['user'] = user
+        return validated_data
+        
+        
