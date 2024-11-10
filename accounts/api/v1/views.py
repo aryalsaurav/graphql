@@ -18,10 +18,22 @@ class LoginView(APIView):
     
     @extend_schema(
         request = LoginSerializer,
-        responses = {200: {
-            'access': 'str',
-            'refresh': 'str',
-        }
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "access": {"type": "string", "description": "JWT access token"},
+                    "refresh": {"type": "string", "description": "JWT refresh token"}
+                },
+                "description": "Successful login returns JWT access and refresh tokens"
+            },
+            401: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string", "example": "Invalid credentials"}
+                },
+                "description": "Error response for invalid credentials"
+            }
         }
     )
     def post(self,request):
@@ -38,6 +50,7 @@ class LoginView(APIView):
                 }
             }
             return Response(context,status=200)
+        return Response({"details":'Invalid Username or password'},status=401)
 
 
 
