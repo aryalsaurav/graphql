@@ -1,4 +1,4 @@
-from rest_framework.views import View
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
@@ -11,7 +11,7 @@ from .serializers import UserCreateSerializer
 
 
 
-class UserCreateView(View):
+class UserCreateView(APIView):
     permission_classes = [AllowAny]
     
     def dispatch(self, request, *args, **kwargs):
