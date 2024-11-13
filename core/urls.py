@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('api/v1/user/',include('accounts.api.v1.urls',namespace='accounts_v1')),
+    path('api/v1/e-commerce/',include('products.api.v1.urls',namespace='e-commerce_v1')),
     path('graphql',csrf_exempt(GraphQLView.as_view(graphiql=True,schema=schema.schema))),
 ]
 

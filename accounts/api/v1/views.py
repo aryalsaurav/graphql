@@ -42,12 +42,8 @@ class LoginView(APIView):
             user = serializer.validated_data.get('user')
             refresh = RefreshToken.for_user(user)
             context = {
-                'status':200,
-                'message':"Logged in successfully !!!",
-                'data': {
-                    'access':str(refresh.access_token),
-                    'refresh':str(refresh)
-                }
+                'access':str(refresh.access_token),
+                'refresh':str(refresh)
             }
             return Response(context,status=200)
         return Response({"details":'Invalid Username or password'},status=401)
@@ -73,10 +69,5 @@ class UserCreateView(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            context = {
-                'message':'success',
-                'status':201,
-                'data':serializer.data
-            }
-            return Response(context,status=201)
+            return Response(serializer.data,status=201)
         return Response({"details":serializer.errors},status=400)
