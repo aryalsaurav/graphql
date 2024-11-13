@@ -16,6 +16,7 @@ class Category(Timestamp):
 
 
 class Product(Timestamp):
+    category = models.ForeignKey(Category,on_delete=models.SET_NULL,null=True,blank=True)
     name = models.CharField(max_length=512)
     description = models.TextField(null=True,blank=True)
     price = models.DecimalField(max_digits=12,decimal_places=2)
@@ -51,7 +52,7 @@ class OrderItem(Timestamp):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    total = models.DecimalField(max_digits=12, decimal_places=2)
+    total = models.DecimalField(max_digits=12, decimal_places=2,null=True,blank=True)
 
 
 
@@ -66,9 +67,7 @@ class OrderItem(Timestamp):
         return self.item_id
     
     
-    def save(self):
-        self.total = self.quantity * self.product.price
-        super().save()
+        
     
     
 
@@ -82,9 +81,5 @@ class Order(Timestamp):
     def __str__(self):
         return self.order_id
     
-    def save(self):
-        total = 0
-        for item in self.order_items.all():
-            total += item.total
-        self.grand_total = total
-        super().save()
+    
+    

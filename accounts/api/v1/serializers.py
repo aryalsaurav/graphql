@@ -10,9 +10,10 @@ from accounts.models import User
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email','password','first_name','last_name','gender','phone_no']
+        fields = ['email','username','password','first_name','last_name','gender','phone_no']
         extra_kwargs = {
-            'password':{'write_only':True}
+            'password':{'write_only':True},
+            'username':{'read_only':True}
         }
     
     
